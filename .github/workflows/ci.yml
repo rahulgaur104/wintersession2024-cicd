@@ -1,0 +1,37 @@
+name: Our CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main  
+      - other-branch
+  workflow_dispatch
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    step:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+          with:
+            python-version: "3.11"
+      - name: Install Python3 package
+        run: python3 -m pip install .[test]
+      - name: Run tests
+        run: python -m pytest
+
+    matrix-test
+      strategy:
+        matrix:
+          os: [ubuntu-latest, windows-latest]
+          python-version: ["3.9", "3.11"]
+          include:
+            - os: macos-latest
+              python: "3.10"
+
+      runs-on: ${{ matrix.os}}
+      steps:
+        - uses: actions/checkout@v4
+        
